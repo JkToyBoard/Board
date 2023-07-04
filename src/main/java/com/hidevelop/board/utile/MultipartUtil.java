@@ -27,7 +27,7 @@ public class MultipartUtil {
      */
     public static String getFormat(String contentType) {
         if (StringUtils.hasText(contentType)) {
-            return contentType.substring(contentType.lastIndexOf(File.separator) + 1);
+            return contentType.substring(contentType.lastIndexOf("/") + 1);
         }
         return null;
     }
@@ -38,6 +38,6 @@ public class MultipartUtil {
      * @param format 확장자
      */
     public static String createPath(String fileId, String format) {
-        return String.format("%s%s%s.%s", BASE_DIR, File.separator ,fileId, format);
+        return String.format("%s%s%s.%s", BASE_DIR, "//" ,fileId, format);
     }
 }

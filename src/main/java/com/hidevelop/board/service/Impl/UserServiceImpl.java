@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
                 refreshTokenValidTime,
                 TimeUnit.MILLISECONDS);
 
-        return user.getRoleKey() + accessToken;
+        return accessToken;
     }
 
 
