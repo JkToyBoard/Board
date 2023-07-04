@@ -39,4 +39,10 @@ public class BoardController {
         var result = boardService.readAllBoard(pageable);
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/info")
+    public ResponseEntity<?> readPerOneBoard(@RequestParam Long boardId){
+        var result = boardService.readPerOneBoard(boardId);
+        return ResponseEntity.ok(result);
+    }
 }

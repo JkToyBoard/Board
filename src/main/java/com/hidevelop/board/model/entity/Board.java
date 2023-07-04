@@ -38,5 +38,15 @@ public class Board extends Base {
     private ViewCount viewCount;
 
 
+    public BoardDto.Response Of(){
+        return BoardDto.Response.builder()
+                .id(this.id)
+                .title(this.title)
+                .content(this.content)
+                .writer(this.writer)
+                .images(this.images)
+                .viewCount(this.getViewCount().getViewCount())
+                .build();
+    }
 
 }

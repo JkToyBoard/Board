@@ -41,4 +41,17 @@ public class BoardDto {
         private Long viewCount;
 
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Response {
+        private Long id;
+        private String title;
+        private String content;
+        private String writer;
+        private List<String> images;
+        private Long viewCount;
+    }
 }

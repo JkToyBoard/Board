@@ -1,6 +1,8 @@
 package com.hidevelop.board.service.Impl;
 
+import com.hidevelop.board.exception.error.ApplicationException;
 import com.hidevelop.board.exception.error.AuthenticationException;
+import com.hidevelop.board.exception.message.ApplicationErrorMessage;
 import com.hidevelop.board.exception.message.AuthErrorMessage;
 import com.hidevelop.board.model.dto.BoardDto;
 import com.hidevelop.board.model.entity.Board;
@@ -12,13 +14,15 @@ import com.hidevelop.board.model.repo.ViewCountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(isolation = Isolation.READ_COMMITTED)
 public class BoardServiceImpl {
 
     private final BoardRepository boardRepository;
@@ -76,5 +80,21 @@ public class BoardServiceImpl {
                 );
 
         return simpleBoards;
+    }
+
+    /**
+     * 게시글 하나 조회~!
+     * @param boardId
+     * @return
+     */
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public BoardDto.Response readPerOneBoard(Long boardId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_BOARD));
+        board.getViewCount().updateViewCount();
+
+        viewCountRepository.save(board.getViewCount());
+        return board.Of();
     }
 }
