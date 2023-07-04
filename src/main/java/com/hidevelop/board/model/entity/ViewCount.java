@@ -22,4 +22,8 @@ public class ViewCount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private long viewCount;
+
+    public void updateViewCount() {
+        this.viewCount++;
+    }
 }
