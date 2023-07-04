@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Board {
+public class Board extends Base{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +31,9 @@ public class Board {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> images;
+
+    @OneToOne(orphanRemoval = true)
+    private ViewCount viewCount;
+
+
 }

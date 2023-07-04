@@ -18,14 +18,15 @@ public class AmazonS3ResourceStorage {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
     private final AmazonS3Client amazonS3Client;
-    public void goodImageStore(String fullPath, MultipartFile multipartFile) {
+    public void imageStore(String fullPath, MultipartFile multipartFile) {
         String path = MultipartUtil.getLocalHomeDirectory()+File.separator+fullPath; // mac = /
         File file = new File(path);
 
 
         try {
+            System.out.println(path);
             multipartFile.transferTo(file);
-            amazonS3Client.putObject(new PutObjectRequest(bucket, "good/"+fullPath, file)
+            amazonS3Client.putObject(new PutObjectRequest(bucket, "images/"+fullPath, file)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (Exception e) {
             throw new IllegalArgumentException("MultiPart -> File 전환 실패 ");
