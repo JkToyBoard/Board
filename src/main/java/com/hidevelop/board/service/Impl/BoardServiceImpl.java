@@ -10,8 +10,7 @@ import com.hidevelop.board.model.repo.BoardRepository;
 import com.hidevelop.board.model.repo.UserRepository;
 import com.hidevelop.board.model.repo.ViewCountRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,7 +47,7 @@ public class BoardServiceImpl {
     }
 
     /**
-     * 전체 게시글 조회 오름차순이라구~~~!
+     * 전체 게시글 조회 내림차순이라구~~~!
      * @param pageable (1페이지당 10개)
      * @return
      */
@@ -75,6 +74,7 @@ public class BoardServiceImpl {
                                 .updateAt(m.getUpdatedAt())
                                 .build()
                 );
+
         return simpleBoards;
     }
 }
