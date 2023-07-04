@@ -1,0 +1,47 @@
+spring:
+
+  #swagger
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  #redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+  # jwt
+  jwt:
+    secret: c2Ftc3VuZ2FzdXNhcHBsZWlzdGhlYmVzdHNhbXN1bmdsZ2lzc2Fk
+
+  # mysql
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.2.110:3306/ipp?allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: ipp
+    password: jk993768**
+
+ # jpa
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+
+#S3
+cloud:
+  aws:
+    stack:
+      auto: false
+    credentials:
+      access-key:
+      secret-key:
+    region:
+      static: ap-northeast-2
+      auto: false
+
+    s3:
+      bucket: board-image-storage
