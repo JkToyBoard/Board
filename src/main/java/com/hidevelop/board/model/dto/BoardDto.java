@@ -3,9 +3,12 @@ package com.hidevelop.board.model.dto;
 import com.hidevelop.board.model.entity.Board;
 import com.hidevelop.board.model.entity.User;
 import com.hidevelop.board.model.entity.ViewCount;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class BoardDto {
@@ -24,5 +27,18 @@ public class BoardDto {
                     .writer(writer)
                     .build();
         }
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class simpleBoard{
+        private Long id;
+        private String title;
+        private String writer;
+        private LocalDateTime updateAt;
+        private Long viewCount;
+
     }
 }
