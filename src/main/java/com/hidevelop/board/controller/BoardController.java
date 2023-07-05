@@ -53,4 +53,10 @@ public class BoardController {
         var result = boardService.updateBoard(request, images);
         return ResponseEntity.ok(result);
     }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteBoard(@RequestParam Long boardId){
+        boardService.deleteBoard(boardId);
+        return ResponseEntity.ok("삭제가 완료되었습니다 :)");
+    }
 }
