@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Builder
@@ -32,6 +33,11 @@ public class User extends Base {
     private Role role;
 
 
+    @OneToMany(fetch = FetchType.LAZY)
+    private Set<Board> boards;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private Set<Comment> comments;
 
     public String getRoleKey(){
         return this.role.getKey();

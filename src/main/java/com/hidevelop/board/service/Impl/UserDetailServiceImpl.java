@@ -33,4 +33,5 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 .userdetails
                 .User(user.getUsername(), user.getPassword(), grantedAuthorities);
     }
+
 }

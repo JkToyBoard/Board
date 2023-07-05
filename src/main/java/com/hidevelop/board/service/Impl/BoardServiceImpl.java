@@ -11,6 +11,7 @@ import com.hidevelop.board.model.entity.ViewCount;
 import com.hidevelop.board.model.repo.BoardRepository;
 import com.hidevelop.board.model.repo.UserRepository;
 import com.hidevelop.board.model.repo.ViewCountRepository;
+import com.hidevelop.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @org.springframework.transaction.annotation.Transactional(isolation = Isolation.READ_COMMITTED)
-public class BoardServiceImpl {
+public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final ViewCountRepository viewCountRepository;
@@ -37,7 +38,7 @@ public class BoardServiceImpl {
      * @param username (작성자)
      * @return
      */
-    public Board saveBoard(List<MultipartFile> files, BoardDto.Request request, String username){
+    public BoardDto.Response saveBoard(List<MultipartFile> files, BoardDto.Request request, String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow( () -> new AuthenticationException(AuthErrorMessage.USER_NOT_FOUND));
 
@@ -46,8 +47,9 @@ public class BoardServiceImpl {
         ViewCount viewCount = viewCountRepository.save(ViewCount.builder().viewCount(0l).build());
 
 
-        return boardRepository.save(request.toEntity(images, viewCount, user.getUsername()));
+        Board board = boardRepository.save(request.toEntity(images, viewCount, user.getUsername()));
 
+        return board.Of();
     }
 
     /**
@@ -96,5 +98,23 @@ public class BoardServiceImpl {
 
         viewCountRepository.save(board.getViewCount());
         return board.Of();
+    }
+
+    /**
+     * 게시글 수정
+     * @param request
+     * @param files
+     * @return
+     */
+    public BoardDto.Response updateBoard(BoardDto.UpdateRequest request, List<MultipartFile> files){
+        Board board = boardRepository.findById(request.getId())
+                .orElseThrow(() -> new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_BOARD));
+
+        s3ServiceImpl.deleteImage(board);
+        List<String> images = s3ServiceImpl.uploadImage(files);
+        board.update(request, images);
+
+        Board resultBoard = boardRepository.save(board);
+        return resultBoard.Of();
     }
 }
