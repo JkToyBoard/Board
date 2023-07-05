@@ -8,12 +8,12 @@ public interface UserService {
 
     public User signUp (UserDto.SignUp signUpDto);
 
-    public String signIn (UserDto.SignIn signInDto, HttpServletResponse response);
+    public UserDto.SignInResponse signIn (UserDto.SignIn signInDto, HttpServletResponse response);
 
 
     public String getAccessTokenByUser(String accessToken);
 
-    public User getUserInfo(String username);
+    public String getUserInfo(String username);
 
-    public User getUserIdByAccessToken(String refreshToken);
+//    public User getUserIdByAccessToken(String refreshToken);
 }

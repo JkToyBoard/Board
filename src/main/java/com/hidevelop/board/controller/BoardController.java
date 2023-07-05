@@ -34,7 +34,7 @@ public class BoardController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<?> readAllBoard(@PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 10) Pageable pageable){
         var result = boardService.readAllBoard(pageable);
         return ResponseEntity.ok(result);

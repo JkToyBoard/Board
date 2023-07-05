@@ -39,7 +39,4 @@ public class User extends Base {
     @OneToMany(fetch = FetchType.LAZY)
     private Set<Comment> comments;
 
-    public String getRoleKey(){
-        return this.role.getKey();
-    }
 }

@@ -24,8 +24,8 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public String signIn(@RequestBody @Valid UserDto.SignIn request, HttpServletResponse response) {
-        return userService.signIn(request, response);
+    public ResponseEntity<UserDto.SignInResponse> signIn(@RequestBody @Valid UserDto.SignIn request, HttpServletResponse response) {
+        return ResponseEntity.ok(userService.signIn(request, response));
     }
 
     /**
@@ -34,12 +34,12 @@ public class UserController {
      * *** Refresh Token 은 재발급 안됨 ! ( 보안 > 편의 ) ***
      */
     @GetMapping("/token")
-    public ResponseEntity<String> getAccessToken(@RequestParam @Valid String accessToken) {
-        return ResponseEntity.ok(userService.getAccessTokenByUser(accessToken));
+    public ResponseEntity<String> getAccessToken(@RequestParam @Valid String refreshToken) {
+        return ResponseEntity.ok(userService.getAccessTokenByUser(refreshToken));
     }
 
     @GetMapping("/info")
-    public ResponseEntity<User> getUserInfo(@RequestParam @Valid String userId) {
+    public ResponseEntity<?> getUserInfo(@RequestParam @Valid String userId) {
         return ResponseEntity.ok(userService.getUserInfo(userId));
     }
 

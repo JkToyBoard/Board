@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +29,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final ViewCountRepository viewCountRepository;
     private final UserRepository userRepository;
-    private final S3ServiceImpl s3ServiceImpl;
+    private final S3ServiceImpl s3Service;
 
     /**
      * 게시판 글 등록
@@ -44,7 +43,7 @@ public class BoardServiceImpl implements BoardService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new AuthenticationException(AuthErrorMessage.USER_NOT_FOUND));
 
-        List<String> images = s3ServiceImpl.uploadImage(files);
+        List<String> images = s3Service.uploadImage(files);
 
         ViewCount viewCount = viewCountRepository.save(ViewCount.builder().viewCount(0l).build());
 
@@ -116,8 +115,8 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(request.getId())
                 .orElseThrow(() -> new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_BOARD));
 
-        s3ServiceImpl.deleteImage(board);
-        List<String> images = s3ServiceImpl.uploadImage(files);
+        s3Service.deleteImage(board);
+        List<String> images = s3Service.uploadImage(files);
         board.update(request, images);
 
         Board resultBoard = boardRepository.save(board);
@@ -133,7 +132,7 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_BOARD));
 
-        s3ServiceImpl.deleteImage(board);
+        s3Service.deleteImage(board);
         boardRepository.deleteById(boardId);
     }
 

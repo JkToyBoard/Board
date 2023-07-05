@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -35,6 +36,9 @@ public class Board extends Base {
 
     @OneToOne(orphanRemoval = true)
     private ViewCount viewCount;
+
+    @OneToMany(orphanRemoval = true)
+    private List<Comment> comment;
 
 
     public BoardDto.Response Of(){

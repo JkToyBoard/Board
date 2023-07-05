@@ -2,8 +2,7 @@ package com.hidevelop.board.model.dto;
 
 import com.hidevelop.board.model.entity.User;
 import com.hidevelop.board.model.type.Role;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -37,4 +36,17 @@ public class UserDto {
         @NotBlank
         private String password;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SignInResponse{
+        private String accessToken;
+        private String refreshToken;
+
+
+    }
+
+
 }
