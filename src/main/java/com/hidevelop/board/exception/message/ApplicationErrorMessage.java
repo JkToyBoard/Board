@@ -11,6 +11,7 @@ public enum ApplicationErrorMessage {
 
     NOT_REGISTERED_BOARD(HttpStatus.BAD_REQUEST,"등록되지않은 글입니다."),
     NOT_REGISTERED_COMMENT(HttpStatus.BAD_REQUEST,"등록되지않은 댓글입니다."),
+    NOT_REGISTERED_IMAGE(HttpStatus.BAD_REQUEST, "등록되지 않은 이미지입니다. ")
     ;
 
     private final HttpStatus status;

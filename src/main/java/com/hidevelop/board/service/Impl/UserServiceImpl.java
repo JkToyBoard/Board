@@ -15,6 +15,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +25,7 @@ import static com.hidevelop.board.exception.message.AuthErrorMessage.*;
 
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -70,8 +73,8 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    public String getAccessTokenByUser(String accessToken) {
-        String username = jwtTokenProvider.getPayloadSub(accessToken);
+    public String getAccessTokenByUser(String refreshToken) {
+        String username = jwtTokenProvider.getPayloadSub(refreshToken);
         Optional<User> user = userRepository.findByUsername(username);
         String password = user.get().getPassword();
         if(!redisTemplate.opsForValue().get(username).isEmpty()) {
@@ -88,8 +91,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AuthenticationException(USER_NOT_FOUND));
     }
 
-    public User getUserIdByAccessToken(String accessToken) {
-        String payload = jwtTokenProvider.getPayloadSub(accessToken);
+    public User getUserIdByAccessToken(String refreshToken) {
+        String payload = jwtTokenProvider.getPayloadSub(refreshToken);
         return getUserInfo(payload);
     }
 

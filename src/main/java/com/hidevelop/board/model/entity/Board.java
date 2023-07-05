@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -49,4 +48,9 @@ public class Board extends Base {
                 .build();
     }
 
+    public void update(BoardDto.UpdateRequest request, List<String> images) {
+        this.title = request.getTitle();
+        this.content = request.getContent();
+        this.images = images;
+    }
 }

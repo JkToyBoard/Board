@@ -45,4 +45,12 @@ public class BoardController {
         var result = boardService.readPerOneBoard(boardId);
         return ResponseEntity.ok(result);
     }
+
+
+    @PutMapping
+    public ResponseEntity<?> updateBoard(@Valid @RequestPart(value = "images", required = false) List<MultipartFile> images,
+                                       @Valid @RequestPart(value = "request")BoardDto.UpdateRequest request){
+        var result = boardService.updateBoard(request, images);
+        return ResponseEntity.ok(result);
+    }
 }
