@@ -79,7 +79,7 @@ public class BoardDto {
         private String writer;
         private List<String> images;
         private Long viewCount;
-        private Set<CommentDto.Response> comments;
+        private List<CommentDto.Response> comments;
     }
 
 

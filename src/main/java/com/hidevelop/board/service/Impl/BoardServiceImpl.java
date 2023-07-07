@@ -7,9 +7,11 @@ import com.hidevelop.board.exception.message.AuthErrorMessage;
 import com.hidevelop.board.model.dto.BoardDto;
 import com.hidevelop.board.model.dto.CommentDto;
 import com.hidevelop.board.model.entity.Board;
+import com.hidevelop.board.model.entity.Comment;
 import com.hidevelop.board.model.entity.User;
 import com.hidevelop.board.model.entity.ViewCount;
 import com.hidevelop.board.model.repo.BoardRepository;
+import com.hidevelop.board.model.repo.CommentRepository;
 import com.hidevelop.board.model.repo.UserRepository;
 import com.hidevelop.board.model.repo.ViewCountRepository;
 import com.hidevelop.board.service.BoardService;
@@ -20,9 +22,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,6 +33,7 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final ViewCountRepository viewCountRepository;
+    private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final S3ServiceImpl s3Service;
 
@@ -110,8 +111,17 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_BOARD));
         board.getViewCount().updateViewCount();
         viewCountRepository.save(board.getViewCount());
-        Set<CommentDto.Response> responseSet = board.getComments().stream().map(m -> m.of()).collect(Collectors.toSet());
-        return board.Of(responseSet);
+        List<Comment> comment = commentRepository.findAllByBoardIdOrderByIdDesc(boardId);
+
+        List<CommentDto.Response> commentDtos = comment.stream().map(m -> CommentDto.Response.builder()
+                .id(m.getId())
+                .writer(m.getWriter())
+                .content(m.getContent())
+                .updateAt(m.getUpdatedAt())
+                .build()).collect(Collectors.toList());
+
+
+        return board.Of(commentDtos);
     }
 
     /**

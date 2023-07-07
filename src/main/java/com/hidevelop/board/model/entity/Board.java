@@ -42,7 +42,7 @@ public class Board extends Base {
     private ViewCount viewCount;
 
     @OneToMany(mappedBy = "boardId" , fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private Set<Comment> comments;
+    private List<Comment> comments;
 
     public BoardDto.Response Of(){
         return BoardDto.Response.builder()
@@ -51,12 +51,11 @@ public class Board extends Base {
                 .content(this.content)
                 .writer(this.writer)
                 .images(this.images)
-//                .viewCount(this.viewCount)
-//                .viewCount(this.getViewCount().getViewCount())
+                .viewCount(this.getViewCount().getViewCount())
                 .build();
     }
 
-    public BoardDto.Response Of(Set<CommentDto.Response> comments){
+    public BoardDto.Response Of(List<CommentDto.Response> comments){
         return BoardDto.Response.builder()
                 .id(this.id)
                 .title(this.title)
