@@ -125,10 +125,12 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(request.getId())
                 .orElseThrow(() -> new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_BOARD));
 
+        List<String> images = new ArrayList<>();
         s3Service.deleteImage(board);
-        List<String> images = s3Service.uploadImage(files);
+        if (files != null){
+            images = s3Service.uploadImage(files);
+        }
         board.update(request, images);
-
         Board resultBoard = boardRepository.save(board);
         return resultBoard.Of();
     }
