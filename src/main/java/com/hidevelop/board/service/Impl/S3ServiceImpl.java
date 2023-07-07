@@ -3,7 +3,6 @@ package com.hidevelop.board.service.Impl;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.hidevelop.board.exception.error.ApplicationException;
 import com.hidevelop.board.exception.message.ApplicationErrorMessage;
-import com.hidevelop.board.model.dto.BoardDto;
 import com.hidevelop.board.model.dto.FileDetail;
 import com.hidevelop.board.model.entity.Board;
 import com.hidevelop.board.model.repo.AmazonS3ResourceStorage;

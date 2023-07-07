@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class BoardDto {
 
@@ -22,6 +23,15 @@ public class BoardDto {
                     .title(this.title)
                     .content(this.content)
                     .images(images)
+                    .viewCount(viewCount)
+                    .writer(writer)
+                    .build();
+        }
+
+        public Board toEntity( ViewCount viewCount, String writer){
+            return Board.builder()
+                    .title(this.title)
+                    .content(this.content)
                     .viewCount(viewCount)
                     .writer(writer)
                     .build();
@@ -69,6 +79,7 @@ public class BoardDto {
         private String writer;
         private List<String> images;
         private Long viewCount;
+        private Set<CommentDto.Response> comments;
     }
 
 

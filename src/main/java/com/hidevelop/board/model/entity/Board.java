@@ -1,6 +1,8 @@
 package com.hidevelop.board.model.entity;
 
+import com.amazonaws.services.ec2.model.FederatedAuthentication;
 import com.hidevelop.board.model.dto.BoardDto;
+import com.hidevelop.board.model.dto.CommentDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,6 +11,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -33,9 +36,13 @@ public class Board extends Base {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> images;
 
+//    @Enumerated
+//    private Long viewCount;
     @OneToOne(orphanRemoval = true)
     private ViewCount viewCount;
 
+    @OneToMany(mappedBy = "boardId" , fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Set<Comment> comments;
 
     public BoardDto.Response Of(){
         return BoardDto.Response.builder()
@@ -44,7 +51,20 @@ public class Board extends Base {
                 .content(this.content)
                 .writer(this.writer)
                 .images(this.images)
+//                .viewCount(this.viewCount)
+//                .viewCount(this.getViewCount().getViewCount())
+                .build();
+    }
+
+    public BoardDto.Response Of(Set<CommentDto.Response> comments){
+        return BoardDto.Response.builder()
+                .id(this.id)
+                .title(this.title)
+                .content(this.content)
+                .writer(this.writer)
+                .images(this.images)
                 .viewCount(this.getViewCount().getViewCount())
+                .comments(comments)
                 .build();
     }
 
@@ -52,5 +72,9 @@ public class Board extends Base {
         this.title = request.getTitle();
         this.content = request.getContent();
         this.images = images;
+    }
+
+    public void addComment(Comment comment){
+        this.comments.add(comment);
     }
 }

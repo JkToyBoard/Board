@@ -5,6 +5,7 @@ import com.hidevelop.board.exception.error.AuthenticationException;
 import com.hidevelop.board.exception.message.ApplicationErrorMessage;
 import com.hidevelop.board.exception.message.AuthErrorMessage;
 import com.hidevelop.board.model.dto.BoardDto;
+import com.hidevelop.board.model.dto.CommentDto;
 import com.hidevelop.board.model.entity.Board;
 import com.hidevelop.board.model.entity.User;
 import com.hidevelop.board.model.entity.ViewCount;
@@ -19,8 +20,11 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +34,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final ViewCountRepository viewCountRepository;
     private final UserRepository userRepository;
-    private final S3ServiceImpl s3ServiceImpl;
+    private final S3ServiceImpl s3Service;
 
     /**
      * 게시판 글 등록
@@ -44,12 +48,17 @@ public class BoardServiceImpl implements BoardService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new AuthenticationException(AuthErrorMessage.USER_NOT_FOUND));
 
-        List<String> images = s3ServiceImpl.uploadImage(files);
-
         ViewCount viewCount = viewCountRepository.save(ViewCount.builder().viewCount(0l).build());
 
+        List<String> images = new ArrayList<>();
+        Board board = new Board();
 
-        Board board = boardRepository.save(request.toEntity(images, viewCount, user.getUsername()));
+        if(files == null) {
+            board = boardRepository.save(request.toEntity(viewCount, user.getUsername()));
+        } else {
+            images = s3Service.uploadImage(files);
+            board = boardRepository.save(request.toEntity(images, viewCount, user.getUsername()));
+        }
 
         return board.Of();
     }
@@ -100,9 +109,9 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_BOARD));
         board.getViewCount().updateViewCount();
-
         viewCountRepository.save(board.getViewCount());
-        return board.Of();
+        Set<CommentDto.Response> responseSet = board.getComments().stream().map(m -> m.of()).collect(Collectors.toSet());
+        return board.Of(responseSet);
     }
 
     /**
@@ -116,10 +125,12 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(request.getId())
                 .orElseThrow(() -> new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_BOARD));
 
-        s3ServiceImpl.deleteImage(board);
-        List<String> images = s3ServiceImpl.uploadImage(files);
+        List<String> images = new ArrayList<>();
+        s3Service.deleteImage(board);
+        if (files != null){
+            images = s3Service.uploadImage(files);
+        }
         board.update(request, images);
-
         Board resultBoard = boardRepository.save(board);
         return resultBoard.Of();
     }
@@ -133,7 +144,7 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_BOARD));
 
-        s3ServiceImpl.deleteImage(board);
+        s3Service.deleteImage(board);
         boardRepository.deleteById(boardId);
     }
 

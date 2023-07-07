@@ -29,12 +29,11 @@ public class BoardController {
                                        @Valid @RequestPart(value = "request")BoardDto.Request request,
                                        Principal principal
     ){
-
         var result = boardService.saveBoard(images, request, principal.getName());
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<?> readAllBoard(@PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 10) Pageable pageable){
         var result = boardService.readAllBoard(pageable);
         return ResponseEntity.ok(result);
