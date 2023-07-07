@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -42,5 +45,15 @@ public class CommentServiceImpl {
             throw new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_COMMENT);
         }
         commentRepository.deleteById(commentId);
+    }
+
+    public List<CommentDto.Response> readComment(Long boardId) {
+        boolean exists = boardRepository.existsById(boardId);
+        if (!exists){
+            throw new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_BOARD);
+        }
+        List<Comment> comments = commentRepository.findAllByBoardIdOrderByIdDesc(boardId);
+        List<CommentDto.Response> responses = comments.stream().map(m -> m.of()).collect(Collectors.toList());
+        return responses;
     }
 }

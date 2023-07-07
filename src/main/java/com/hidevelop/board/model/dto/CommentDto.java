@@ -31,7 +31,7 @@ public class CommentDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Response{
-
+        private Long id;
         private String writer;
         private String content;
         private LocalDateTime updateAt;

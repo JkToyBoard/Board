@@ -110,8 +110,8 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_BOARD));
         board.getViewCount().updateViewCount();
         viewCountRepository.save(board.getViewCount());
-        Set<CommentDto.Response> responseSet = board.getComments().stream().map(m -> m.of()).collect(Collectors.toSet());
-        return board.Of(responseSet);
+
+        return board.Of();
     }
 
     /**
