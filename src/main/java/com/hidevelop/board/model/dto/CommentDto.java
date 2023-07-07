@@ -1,5 +1,6 @@
 package com.hidevelop.board.model.dto;
 
+import com.hidevelop.board.model.entity.Board;
 import com.hidevelop.board.model.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

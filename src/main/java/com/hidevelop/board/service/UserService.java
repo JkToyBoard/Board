@@ -15,5 +15,5 @@ public interface UserService {
 
     public String getUserInfo(String username);
 
-//    public User getUserIdByAccessToken(String refreshToken);
+
 }

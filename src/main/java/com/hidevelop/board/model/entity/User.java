@@ -33,10 +33,10 @@ public class User extends Base {
     private Role role;
 
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Board> boards;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Comment> comments;
 
 }

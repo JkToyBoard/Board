@@ -29,7 +29,6 @@ public class BoardController {
                                        @Valid @RequestPart(value = "request")BoardDto.Request request,
                                        Principal principal
     ){
-
         var result = boardService.saveBoard(images, request, principal.getName());
         return ResponseEntity.ok(result);
     }

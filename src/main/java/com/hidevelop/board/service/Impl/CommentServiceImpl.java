@@ -5,6 +5,7 @@ import com.hidevelop.board.exception.error.AuthenticationException;
 import com.hidevelop.board.exception.message.ApplicationErrorMessage;
 import com.hidevelop.board.exception.message.AuthErrorMessage;
 import com.hidevelop.board.model.dto.CommentDto;
+import com.hidevelop.board.model.entity.Board;
 import com.hidevelop.board.model.entity.Comment;
 import com.hidevelop.board.model.repo.BoardRepository;
 import com.hidevelop.board.model.repo.CommentRepository;
@@ -24,11 +25,13 @@ public class CommentServiceImpl {
     public CommentDto.Response saveComment(CommentDto.Request request, String username, Long boardId){
         userRepository.findByUsername(username)
                 .orElseThrow( () -> new AuthenticationException(AuthErrorMessage.USER_NOT_FOUND));
-        boardRepository.findById(boardId)
-                .orElseThrow( () -> new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_BOARD));
-        Comment entity = request.toEntity(username, boardId);
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_BOARD));
 
-        Comment comment = commentRepository.save(entity);
+        Comment comment = commentRepository.save(request.toEntity(username, board.getId()));
+
+        board.addComment(comment);
+        boardRepository.save(board);
 
         return comment.of();
     }
