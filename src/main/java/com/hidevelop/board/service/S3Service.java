@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface S3Service {
-    public List<String> uploadImage(List<MultipartFile> multipartFiles);
+    List<String> uploadImage(List<MultipartFile> multipartFiles);
 
-    public void deleteImage(Board board);
+    void deleteImage(Board board);
 }

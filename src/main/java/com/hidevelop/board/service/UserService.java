@@ -6,14 +6,14 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface UserService {
 
-    public User signUp (UserDto.SignUp signUpDto);
+    User signUp (UserDto.SignUp signUpDto);
 
-    public UserDto.SignInResponse signIn (UserDto.SignIn signInDto, HttpServletResponse response);
+    UserDto.SignInResponse signIn (UserDto.SignIn signInDto, HttpServletResponse response);
 
 
-    public String getAccessTokenByUser(String accessToken);
+    String getAccessTokenByUser(String accessToken);
 
-    public String getUserInfo(String username);
+    String getUserInfo(String username);
 
 
 }

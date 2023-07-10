@@ -4,7 +4,6 @@ import com.hidevelop.board.model.dto.CommentDto;
 import com.hidevelop.board.service.Impl.CommentServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -28,5 +27,11 @@ public class CommentController {
                                            @RequestParam Long commentId){
         commentService.deleteComment(commentId);
         return ResponseEntity.ok("삭제가 완료되었습니다.");
+    }
+
+    @GetMapping("/{boardId}/comments")
+    public ResponseEntity<?> readComment(@PathVariable(value = "boardId") Long boardId){
+        var result = commentService.readComment(boardId);
+        return ResponseEntity.ok(result);
     }
 }

@@ -18,14 +18,13 @@ public class Comment extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
     private Long boardId;
     private String content;
     private String writer;
 
     public CommentDto.Response of(){
         return CommentDto.Response.builder()
+                .id(this.id)
                 .content(this.content)
                 .writer(this.writer)
                 .updateAt(this.getUpdatedAt())

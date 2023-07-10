@@ -51,20 +51,7 @@ public class Board extends Base {
                 .content(this.content)
                 .writer(this.writer)
                 .images(this.images)
-//                .viewCount(this.viewCount)
-//                .viewCount(this.getViewCount().getViewCount())
-                .build();
-    }
-
-    public BoardDto.Response Of(Set<CommentDto.Response> comments){
-        return BoardDto.Response.builder()
-                .id(this.id)
-                .title(this.title)
-                .content(this.content)
-                .writer(this.writer)
-                .images(this.images)
                 .viewCount(this.getViewCount().getViewCount())
-                .comments(comments)
                 .build();
     }
 
