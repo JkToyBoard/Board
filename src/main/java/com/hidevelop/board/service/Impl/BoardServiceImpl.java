@@ -22,9 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 @Service
 @RequiredArgsConstructor
@@ -104,7 +102,7 @@ public class BoardServiceImpl implements BoardService {
      * @return
      */
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public BoardDto.Response readPerOneBoard(Long boardId) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new ApplicationException(ApplicationErrorMessage.NOT_REGISTERED_BOARD));

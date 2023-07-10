@@ -10,6 +10,7 @@ import com.hidevelop.board.model.entity.Comment;
 import com.hidevelop.board.model.repo.BoardRepository;
 import com.hidevelop.board.model.repo.CommentRepository;
 import com.hidevelop.board.model.repo.UserRepository;
+import com.hidevelop.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class CommentServiceImpl {
+public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
